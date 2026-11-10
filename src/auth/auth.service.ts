@@ -19,7 +19,7 @@ export class AuthService {
     async login(correo:string, contrasena:string){
         //Ejecutar consulta en postgre
         //En postgre se usa $1 en vez de ? para parametrizar las consultas
-        const result = await this.pool.query('SELECT id_usuario, correo, contrasena, edad, peso, altura, perfil_completo FROM usuarios WHERE correo = $1', [correo]);
+        const result = await this.pool.query('SELECT id_usuario, correo, contrasena, edad, peso, altura, perfil_completo FROM public.usuarios WHERE correo = $1', [correo]);
         
         const  filas = result.rows;
         if(!filas.length){
@@ -48,13 +48,14 @@ export class AuthService {
         };
     }
     async register(nombre:string, correo:string, contrasena:string){
+
         if(!nombre || !correo || !contrasena){
             throw new BadRequestException('Todos los campos son requeridos.');
         }
         if(contrasena.length < 8){
             throw new BadRequestException('La contraseña debe tener un minimo de 8 caracteres');
         }
-        const validar = await this.pool.query('SELECT correo FROM usuarios WHERE correo = $1', [correo]);
+        const validar = await this.pool.query('SELECT correo FROM public.usuarios WHERE correo = $1', [correo]);
         const filasvalidar  = validar.rows;
 
         if(filasvalidar.length>0){
@@ -65,7 +66,7 @@ export class AuthService {
 
         //Registrar usuario
         const query = await this.pool.query(
-          'INSERT INTO usuarios(nombre, correo, contrasena) VALUES($1, $2, $3) RETURNING id_usuario, nombre, correo',
+          'INSERT INTO public.usuarios(nombre, correo, contrasena) VALUES($1, $2, $3) RETURNING id_usuario, nombre, correo',
           [nombre, correo, hash],
         );
         const result = query.rows[0];

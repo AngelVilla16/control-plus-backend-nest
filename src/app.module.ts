@@ -1,9 +1,12 @@
 import { ConfigurableModuleBuilder, Module } from '@nestjs/common';
+import {JwtModule} from '@nestjs/jwt';
 import { createObserveModule } from '@nestjs/observe';
 import {Pool} from 'pg';
 import {ConfigModule, ConfigService} from '@nestjs/config';
 import { AuthController } from './auth/auth.controller.js';
 import { AuthService } from './auth/auth.service.js';
+import { MedicionesController } from './mediciones/mediciones.controller.js';
+import { MedicionesService } from './mediciones/mediciones.service.js';
 
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
@@ -14,9 +17,17 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       //Carga el env de forma global
       isGlobal:true,
     }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: {expiresIn: '7d'},
+      })
+    }),
     
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, MedicionesController],
   //Configuracion del pool de conexiones desde el provedor 'provider'
   providers: [ AuthService,{
     provide:'DB_POOL',
@@ -31,6 +42,6 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
         database: configService.get<string>('DB_NAME'),
       });
     },
-  }],
+  }, MedicionesService],
 })
 export class AppModule {}
