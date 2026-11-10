@@ -12,4 +12,10 @@ export class AuthController {
     //Llamar al metodo del servicio y enviar los datos del body
     return await this.authService.login(body.correo, body.contrasena);
   }
+  //Ruta POST auth/registro
+  @Post('registro')
+  async registro(@Body() body:{nombre:string; correo:string; contrasena:string;}){
+    //Llamar al metodo del service
+    return await this.authService.register(body.nombre, body.correo, body.contrasena);
+  }
 }
