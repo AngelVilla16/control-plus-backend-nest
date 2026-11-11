@@ -19,7 +19,7 @@ export class AuthService {
     async login(correo:string, contrasena:string){
         //Ejecutar consulta en postgre
         //En postgre se usa $1 en vez de ? para parametrizar las consultas
-        const result = await this.pool.query('SELECT id_usuario, correo, contrasena, edad, peso, altura, perfil_completo FROM public.usuarios WHERE correo = $1', [correo]);
+        const result = await this.pool.query('SELECT id_usuario, nombre, correo, contrasena, edad, peso, altura, perfil_completo FROM public.usuarios WHERE correo = $1', [correo]);
         
         const  filas = result.rows;
         if(!filas.length){

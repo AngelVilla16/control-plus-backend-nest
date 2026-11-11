@@ -1,4 +1,6 @@
 import { ConfigurableModuleBuilder, Module } from '@nestjs/common';
+import {PassportModule} from '@nestjs/passport';
+import{JwtStrategy} from './auth/jwt.strategy/jwt.strategy.js';
 import {JwtModule} from '@nestjs/jwt';
 import { createObserveModule } from '@nestjs/observe';
 import {Pool} from 'pg';
@@ -13,6 +15,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({
   imports: [
+    PassportModule,
     ConfigModule.forRoot({
       //Carga el env de forma global
       isGlobal:true,
@@ -29,7 +32,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
   ],
   controllers: [AuthController, MedicionesController],
   //Configuracion del pool de conexiones desde el provedor 'provider'
-  providers: [ AuthService,{
+  providers: [ AuthService,JwtStrategy,{
     provide:'DB_POOL',
     inject:[ConfigService],
     useFactory:(configService: ConfigService)=>{
