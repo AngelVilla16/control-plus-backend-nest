@@ -9,7 +9,13 @@ export class MedicionesController {
   @Post('registrar-glucosa')
 
   async registrarGlucosa(@Body() body:{tipo:string,glucosa:number, seleccionado:string, id_usuario:number}, @Req() req:any){
-    const id_usuario = req.usuario?.id_usuario;
-    return await this.medicionesService.RegistrarGlucosa(body.tipo,body.glucosa, body.seleccionado, id_usuario);
+    const id_usuario = req.user?.id_usuario;
+    return await this.medicionesService.RegistrarGlucosa(body.glucosa, body.seleccionado, id_usuario);
+  }
+
+  @Post('registrar-presion')
+  async registrarPresion(@Body() body:{ sistolica:number, diastolica:number, seleccionado:string, id_usuario:number}, @Req() req:any){
+    const id_usuario = req.user?.id_usuario;
+    return await this.medicionesService.RegistrarPresion(body.sistolica, body.diastolica, body.seleccionado, id_usuario);
   }
 }

@@ -34,7 +34,7 @@ export class AuthService {
 
         }
         //Generar el token de JWT
-        const token = this.jwt.sign({id_usuario: usuario.id_usuario}, {expiresIn: '7d'});
+        const token = this.jwt.sign({id_usuario: usuario.id_usuario}, {expiresIn: '1h'});
         return{
             mensaje:'Inicio de sesión exitoso',
             nombre: usuario.nombre,
