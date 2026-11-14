@@ -9,6 +9,8 @@ import { AuthController } from './auth/auth.controller.js';
 import { AuthService } from './auth/auth.service.js';
 import { MedicionesController } from './mediciones/mediciones.controller.js';
 import { MedicionesService } from './mediciones/mediciones.service.js';
+import { ProfileController } from './profile/profile.controller.js';
+import { ProfileService } from './profile/profile.service.js';
 
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
@@ -30,7 +32,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     }),
     
   ],
-  controllers: [AuthController, MedicionesController],
+  controllers: [AuthController, MedicionesController, ProfileController],
   //Configuracion del pool de conexiones desde el provedor 'provider'
   providers: [ AuthService,JwtStrategy,{
     provide:'DB_POOL',
@@ -45,6 +47,6 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
         database: configService.get<string>('DB_NAME'),
       });
     },
-  }, MedicionesService],
+  }, MedicionesService, ProfileService],
 })
 export class AppModule {}
