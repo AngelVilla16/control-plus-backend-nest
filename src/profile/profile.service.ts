@@ -16,4 +16,13 @@ export class ProfileService {
     const query = await this.pool.query('UPDATE usuarios SET edad = $1, peso =$2, altura=$3, perfil_completo= $4 WHERE id_usuario = $5',[edad, peso, altura, check, id_usuario]);
     return {mensaje:'Perfil actualizado correctamente.'};
   }
+  //funcion para traer los datos del perfil
+  async datosPerfil(id_usuario: number){
+
+    const query = await this.pool.query('SELECT correo, edad, peso, altura FROM usuarios WHERE id_usuario = $1', [id_usuario]);
+    const filas = query.rows;
+    const usuario = filas[0];
+    return {correo:usuario.correo, edad: usuario.edad, peso: usuario.peso, altura: usuario.altura};
+  }
+
 }
