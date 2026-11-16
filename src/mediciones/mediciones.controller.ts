@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Body, Req } from '@nestjs/common';
+import { Controller, Post, UseGuards, Body, Req,Get } from '@nestjs/common';
 import {AuthGuard} from '@nestjs/passport';
 import {MedicionesService} from './mediciones.service.js';
 
@@ -17,5 +17,10 @@ export class MedicionesController {
   async registrarPresion(@Body() body:{ sistolica:number, diastolica:number, seleccionado:string, id_usuario:number}, @Req() req:any){
     const id_usuario = req.user?.id_usuario;
     return await this.medicionesService.RegistrarPresion(body.sistolica, body.diastolica, body.seleccionado, id_usuario);
+  }
+  @Get('glucosa-reciente')
+  async getGlucosaReciente(@Req() req:any){
+    const id_usuario = req.user?.id_usuario;
+    return await this.medicionesService.getGlucosaReciente(id_usuario);
   }
 }

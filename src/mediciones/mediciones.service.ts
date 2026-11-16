@@ -21,4 +21,12 @@ export class MedicionesService {
     const query = await this.pool.query('INSERT INTO mediciones(tipo, sistolica, diastolica,momento, id_usuario) VALUES($1, $2, $3, $4, $5)',[tipo, sistolica, diastolica, seleccionado, id_usuario]);
     return {mensaje:'Nivel de  presión registrado correctamente!'}
   }
+  async getGlucosaReciente(id_usuario:number){
+    const query = await this.pool.query(
+      'SELECT glucosa, fecha FROM mediciones WHERE id_usuario= $1 LIMIT 10', [id_usuario]
+    );
+    const filas = query.rows;
+    const glucosausuario = filas[0];
+    return {glucosa:glucosausuario.glucosa, fecha: glucosausuario.fecha}
+  }
 }
