@@ -22,11 +22,15 @@ export class MedicionesService {
     return {mensaje:'Nivel de  presión registrado correctamente!'}
   }
   async getGlucosaReciente(id_usuario:number){
-    const query = await this.pool.query(
-      'SELECT glucosa, fecha FROM mediciones WHERE id_usuario= $1 LIMIT 10', [id_usuario]
-    );
-    const filas = query.rows;
-    const glucosausuario = filas[0];
-    return {glucosa:glucosausuario.glucosa, fecha: glucosausuario.fecha}
+    const {rows}= await this.pool.query(
+      'SELECT glucosa, fecha FROM mediciones WHERE id_usuario= $1 ORDER BY fecha DESC LIMIT 10', [id_usuario]
+    ); 
+    
+    const filas = rows[0];
+    if(filas.length === 0){
+      throw new UnauthorizedException('No se encontraron registros de glucosa para este usuario');
+    }
+    
+    return rows;
   }
 }
