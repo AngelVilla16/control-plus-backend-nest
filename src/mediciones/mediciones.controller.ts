@@ -23,4 +23,10 @@ export class MedicionesController {
     const id_usuario = req.user?.id_usuario;
     return await this.medicionesService.getGlucosaReciente(id_usuario);
   }
+
+  @Get('presion-reciente')
+  async getPresionReciente(@Req() req:any){
+    const id_usuario = req.user?.id_usuario;
+    return await this.medicionesService.getPresionReciente(id_usuario);
+  }
 }
